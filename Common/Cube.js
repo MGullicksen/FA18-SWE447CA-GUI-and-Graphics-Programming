@@ -20,39 +20,39 @@ function Cube( vertexShaderId, fragmentShaderId ) {
            // Add your list vertex positions here
 		   //1
 		   0.0, 0.0, 0.0, // Vertex 0
-		   1.0, 0.0, 0.0, // Vertex 1
-		   1.0, 1.0, 0.0, // Vertex 2
-		   0.0, 1.0, 0.0, // Vertex 3
+		   0.5, 0.0, 0.0, // Vertex 1
+		   0.5, 0.5, 0.0, // Vertex 2
+		   0.0, 0.5, 0.0, // Vertex 3
 		   
 		   //2
-		   1.0, 0.0, 0.0, // Vertex 4
-		   1.0, 1.0, 0.0, // Vertex 5
-		   1.0, 1.0, 1.0, // Vertex 6
-		   1.0, 0.0, 1.0, // Vertex 7
+		   0.5, 0.0, 0.0, // Vertex 4
+		   0.5, 0.5, 0.0, // Vertex 5
+		   0.5, 0.5, 0.5, // Vertex 6
+		   0.5, 0.0, 0.5, // Vertex 7
 		   
 		   //3
-		   1.0, 0.0, 1.0, // Vertex 8
-		   0.0, 0.0, 1.0, // Vertex 9
-		   0.0, 1.0, 1.0, // Vertex 10
-		   1.0, 1.0, 1.0, // Vertex 11
+		   0.5, 0.0, 0.5, // Vertex 8
+		   0.0, 0.0, 0.5, // Vertex 9
+		   0.0, 0.5, 0.5, // Vertex 10
+		   0.5, 0.5, 0.5, // Vertex 11
 		   
 		   //4
-		   0.0, 0.0, 1.0, // Vertex 12
+		   0.0, 0.0, 0.5, // Vertex 12
 		   0.0, 0.0, 0.0, // Vertex 13
-		   0.0, 1.0, 0.0, // Vertex 14
-		   0.0, 1.0, 1.0, // Vertex 15
+		   0.0, 0.5, 0.0, // Vertex 14
+		   0.0, 0.5, 0.5, // Vertex 15
 		   
 		   //5
-		   0.0, 1.0, 0.0, // Vertex 16
-		   1.0, 1.0, 0.0, // Vertex 17
-		   1.0, 1.0, 1.0, // Vertex 18
-		   0.0, 1.0, 1.0, // Vertex 19
+		   0.0, 0.5, 0.0, // Vertex 16
+		   0.5, 0.5, 0.0, // Vertex 17
+		   0.5, 0.5, 0.5, // Vertex 18
+		   0.0, 0.5, 0.5, // Vertex 19
 		   
 		   //6
-		   0.0, 0.0, 1.0, // Vertex 20
-		   1.0, 0.0, 1.0, // Vertex 21
+		   0.0, 0.0, 0.5, // Vertex 20
+		   0.5, 0.0, 0.5, // Vertex 21
 		   0.0, 0.0, 0.0, // Vertex 22
-		   1.0, 0.0, 0.0, // Vertex 23
+		   0.5, 0.0, 0.0, // Vertex 23
 		   
 		 
             ]),
@@ -60,6 +60,50 @@ function Cube( vertexShaderId, fragmentShaderId ) {
     };
     
 
+	
+	this.colors = {
+		values : new Float32Array([
+		//1
+		1.0, 0.0, 0.0, // 0
+		1.0, 0.0, 0.0, // 1
+		1.0, 0.0, 0.0, // 2
+		1.0, 0.0, 0.0, // 3
+		
+		//2
+		1.0, 1.0, 0.0, // 4
+		1.0, 1.0, 0.0, // 5
+		1.0, 1.0, 0.0, // 6
+		1.0, 1.0, 0.0, // 7
+		
+		//3
+		0.0, 1.0, 0.0, // 8
+		0.0, 1.0, 0.0, // 9
+		0.0, 1.0, 0.0, // 10
+		0.0, 1.0, 0.0, // 11
+		
+		//4
+		1.0, 1.0, 1.0, // 12
+		1.0, 1.0, 1.0, // 13
+		1.0, 1.0, 1.0, // 14
+		1.0, 1.0, 1.0, // 15
+		
+		//5
+		0.0, 1.0, 1.0, // 16
+		0.0, 1.0, 1.0, // 17
+		0.0, 1.0, 1.0, // 18
+		0.0, 1.0, 1.0, // 19
+		
+		//6
+		0.0, 0.0, 1.0, // 20
+		0.0, 0.0, 1.0, // 22
+		0.0, 0.0, 1.0, // 23
+		0.0, 0.0, 1.0, // 24
+		
+		]),
+		numComponents : 3
+	};
+	
+	
 	
     this.indices = { 
         values : new Uint16Array([
@@ -106,17 +150,25 @@ function Cube( vertexShaderId, fragmentShaderId ) {
     };
     this.indices.count = this.indices.values.length;
 
-    
+    // position
     this.positions.buffer = gl.createBuffer();
     gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
     gl.bufferData( gl.ARRAY_BUFFER, this.positions.values, gl.STATIC_DRAW );
-
+	this.positions.attributeLoc = gl.getAttribLocation( this.program, "vPosition" );
+    gl.enableVertexAttribArray( this.positions.attributeLoc );
+	
+	// colors
+	this.colors.buffer = gl.createBuffer();
+	gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
+    gl.bufferData( gl.ARRAY_BUFFER, this.colors.values, gl.STATIC_DRAW );
+	this.colors.attributeLoc = gl.getAttribLocation( this.program, "vColor" );
+	gl.enableVertexAttribArray( this.colors.attributeLoc );
+	
+	// indicies
     this.indices.buffer = gl.createBuffer();
     gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
     gl.bufferData( gl.ELEMENT_ARRAY_BUFFER, this.indices.values, gl.STATIC_DRAW );
 
-    this.positions.attributeLoc = gl.getAttribLocation( this.program, "vPosition" );
-    gl.enableVertexAttribArray( this.positions.attributeLoc );
 
     MVLoc = gl.getUniformLocation( this.program, "MV" );
 
@@ -128,6 +180,12 @@ function Cube( vertexShaderId, fragmentShaderId ) {
         gl.bindBuffer( gl.ARRAY_BUFFER, this.positions.buffer );
         gl.vertexAttribPointer( this.positions.attributeLoc, this.positions.numComponents,
             gl.FLOAT, gl.FALSE, 0, 0 );
+			
+		
+		gl.bindBuffer( gl.ARRAY_BUFFER, this.colors.buffer );
+        gl.vertexAttribPointer( this.colors.attributeLoc, this.colors.numComponents,
+            gl.FLOAT, gl.FALSE, 0, 0 );
+		
  
         gl.bindBuffer( gl.ELEMENT_ARRAY_BUFFER, this.indices.buffer );
 
