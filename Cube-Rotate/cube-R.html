@@ -1,1 +1,66 @@
+<!DOCTYPE html>
 
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+
+<script src="../Common/webgl-utils.js"></script>
+<script src="../Common/initShaders.js"></script>
+<script src="../Common/MV.js"></script>
+<script src="../Common/Cube.js"></script>
+<script src="cube-R.js"></script>
+
+<script id="Cube-vertex-shader" type="x-shader/x-vertex">
+attribute vec4 vPosition;
+
+attribute vec3 vColor;
+
+varying vec3 fColor; // added to pass color from vertex-shader to fragment-shader
+
+uniform mat4 MV;
+
+uniform mat4 p;
+
+void main()
+{
+    gl_PointSize = 5.0;
+    gl_Position = MV * vPosition;
+	//fColor = vec3(vColor, 1.0);
+	fColor = vColor;
+
+}
+</script>
+
+<script id="Cube-fragment-shader" type="x-shader/x-fragment">
+
+precision highp float;
+
+varying vec3 fColor;
+
+
+
+void main()
+{
+    //gl_FragColor = vec4(1.0, 0.0, gl_FrontFacing ? 1.0 : 0.0, 1.0);
+	
+	gl_FragColor = vec4(fColor, 1.0);
+	
+}
+</script>
+</head>
+
+<body>
+<canvas id="webgl-canvas" width="512" height="512" style="background-color: #0000FF"></canvas>
+
+<button id="xButton">Rotate X</button> 
+
+<button id="yButton">Rotate Y</button>
+
+<div> 
+speed 0% <input id="slider" type="range" 
+min="0" max="100" step="1" value="50" />
+    100%
+</div>
+
+</body>
+</html>
